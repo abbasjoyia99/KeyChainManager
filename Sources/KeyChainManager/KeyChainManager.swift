@@ -67,7 +67,7 @@ public class KeychainManager {
    private func retriveEmail(_ key:String) -> String? {
         let query: [String:Any] = [
             kSecClass as String:kSecClassGenericPassword,
-            kSecAttrAccount as String: email,
+            kSecAttrAccount as String: key,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecReturnAttributes as String:true,
             kSecReturnData as String:true
@@ -75,8 +75,8 @@ public class KeychainManager {
         var item:CFTypeRef?
         
         if (SecItemCopyMatching(query as CFDictionary, &item) == noErr) {
-            guard let existingItem = item as? [String:Any] else {return}
-            guard let email = existingItem[kSecAttrAccount as String] as? String else {return}
+            guard let existingItem = item as? [String:Any] else {return nil}
+            guard let email = existingItem[kSecAttrAccount as String] as? String else {return nil}
             return email
         } else {
             return nil
@@ -93,7 +93,7 @@ public class KeychainManager {
      
      - Returns: A string value.
      */
-    public func getPassword(forKey: String) -> String ?{
+    public func getPassword(forKey: String) -> String? {
         return retrivePassword(forKey)
     }
     
@@ -107,9 +107,9 @@ public class KeychainManager {
         var item:CFTypeRef?
         
         if (SecItemCopyMatching(query as CFDictionary, &item) == noErr) {
-            guard let existingItem = item as? [String:Any] else {return}
-            guard let passwordData = existingItem[kSecValueData as String] as? Data else {return}
-            guard let password = String(data: passwordData, encoding: .utf8) else {return}
+            guard let existingItem = item as? [String:Any] else {return nil}
+            guard let passwordData = existingItem[kSecValueData as String] as? Data else {return nil}
+            guard let password = String(data: passwordData, encoding: .utf8) else {return nil}
             return password
         } else {
             return nil
