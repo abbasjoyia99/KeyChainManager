@@ -15,11 +15,12 @@ public class KeychainManager {
      
      - Parameters:
         - email: The email to be saved.
+        - forKey: The key associated with a value that will be saved or retrieved.
      
      - Returns: A boolean value indicating whether the email was saved successfully.
      */
-    public func saveEmail(email: String) -> Bool {
-        return saveData(data: email, forKey: "email")
+    public func saveEmail(email: String, forKey:String) -> Bool {
+        return saveData(data: email, forKey: forKey)
     }
     
     /**
@@ -27,11 +28,12 @@ public class KeychainManager {
      
      - Parameters:
         - password: The password to be saved.
+        - forKey: The key associated with a value that will be saved or retrieved.
      
      - Returns: A boolean value indicating whether the password was saved successfully.
      */
-    public func savePassword(password: String) -> Bool {
-        return saveData(data: password, forKey: "password")
+    public func savePassword(password: String,forKey: String) -> Bool {
+        return saveData(data: password, forKey: forKey)
     }
     
     private func saveData(data: String, forKey key: String) -> Bool {
@@ -49,7 +51,71 @@ public class KeychainManager {
         
         return false
     }
+    // MARK: - Get Data
+    /**
+     Get the specified email securely in the keychain.
+     
+     - Parameters:
+       - forKey: The key associated with a value that will be saved or retrieved.
+     
+     - Returns: A string value.
+     */
+    public func getEmail(forKey: String) -> String? {
+        return retriveEmail(forKey)
+    }
     
+   private func retriveEmail(_ key:String) -> String? {
+        let query: [String:Any] = [
+            kSecClass as String:kSecClassGenericPassword,
+            kSecAttrAccount as String: email,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnAttributes as String:true,
+            kSecReturnData as String:true
+        ]
+        var item:CFTypeRef?
+        
+        if (SecItemCopyMatching(query as CFDictionary, &item) == noErr) {
+            guard let existingItem = item as? [String:Any] else {return}
+            guard let email = existingItem[kSecAttrAccount as String] as? String else {return}
+            return email
+        } else {
+            return nil
+            //print("Something went wrong while trying to find password in keychain")
+        }
+        
+    }
+    
+    /**
+     Get the specified password securely in the keychain.
+     
+     - Parameters:
+       - forKey: The key associated with a value that will be saved or retrieved.
+     
+     - Returns: A string value.
+     */
+    public func getPassword(forKey: String) -> String ?{
+        return retrivePassword(forKey)
+    }
+    
+   private func retrivePassword(_ key:String)-> String? {
+        let query: [String:Any] = [
+            kSecClass as String:kSecClassGenericPassword,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnAttributes as String:true,
+            kSecReturnData as String:true
+        ]
+        var item:CFTypeRef?
+        
+        if (SecItemCopyMatching(query as CFDictionary, &item) == noErr) {
+            guard let existingItem = item as? [String:Any] else {return}
+            guard let passwordData = existingItem[kSecValueData as String] as? Data else {return}
+            guard let password = String(data: passwordData, encoding: .utf8) else {return}
+            return password
+        } else {
+            return nil
+        }
+        
+    }
     // MARK: - Update Data
     
     /**
@@ -60,8 +126,8 @@ public class KeychainManager {
      
      - Returns: A boolean value indicating whether the email was updated successfully.
      */
-    public func updateEmail(newEmail: String) -> Bool {
-        return updateData(data: newEmail, forKey: "email")
+    public func updateEmail(newEmail: String,forKey: String) -> Bool {
+        return updateData(data: newEmail, forKey: forKey)
     }
     
     /**
@@ -72,8 +138,8 @@ public class KeychainManager {
      
      - Returns: A boolean value indicating whether the password was updated successfully.
      */
-    public func updatePassword(newPassword: String) -> Bool {
-        return updateData(data: newPassword, forKey: "password")
+    public func updatePassword(newPassword: String, forKey: String) -> Bool {
+        return updateData(data: newPassword, forKey: forKey)
     }
     
     private func updateData(data: String, forKey key: String) -> Bool {
@@ -105,8 +171,8 @@ public class KeychainManager {
      
      - Returns: A boolean value indicating whether the email was deleted successfully.
      */
-    public func deleteEmail() -> Bool {
-        return deleteData(forKey: "email")
+    public func deleteEmail(forKey: String) -> Bool {
+        return deleteData(forKey: forKey)
     }
     
     /**
@@ -117,8 +183,8 @@ public class KeychainManager {
      
      - Returns: A boolean value indicating whether the password was deleted successfully.
      */
-    public func deletePassword() -> Bool {
-        return deleteData(forKey: "password")
+    public func deletePassword(forKey: String) -> Bool {
+        return deleteData(forKey: forKey)
     }
     
     private func deleteData(forKey key: String) -> Bool {
