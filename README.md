@@ -1,4 +1,5 @@
 # KeyChainManager
+
 **KeychainManager** is a Swift library that provides a convenient way to securely store and retrieve data in the keychain. It allows you to save and retrieve email and password values associated with unique keys. The library utilizes the Security framework to interact with the keychain.
 
 **Installation**
@@ -8,17 +9,18 @@
 The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
 
 Once you have your Swift package set up, adding KeyChainManager as a dependency is as easy as adding it to the dependencies value of your Package.swift.
-
+```
 dependencies: [
     .package(url: "https://github.com/abbasjoyia99/KeyChainManager.git", .upToNextMajor(from: "2.0.0"))
 ]
+```
 
 **Manually**
 
 If you prefer not to use any of the aforementioned dependency managers, you can integrate KeychainManager into your project manually.
 
-1 Download zip file
-2 Open KeyChainManager/Sources/KeyChainManager
+1 Download zip file\
+2 Open KeyChainManager/Sources/KeyChainManager\
 3 Drag and drop KeyChainManager.swift file into project
 
 
@@ -114,11 +116,13 @@ Xcode 11.0+
 Swift 5.0+
 
 **Acknowledgements**
+
 The library is inspired by Apple's Keychain Services and aims to provide a simplified interface for working with the keychain in Swift.
 
 If you have any suggestions, issues, or feature requests, please feel free to open an issue or submit a pull request. Contributions are welcome!
 
 **Contact**
+
 abbasjoyia99@gmail.com
 
 
