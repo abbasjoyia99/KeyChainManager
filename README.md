@@ -112,7 +112,9 @@ The **KeychainManager** class provides the following methods:
 **Requirements**
 
 iOS 9.0+ / macOS 10.12+ / tvOS 9.0+ / watchOS 2.0+
+
 Xcode 11.0+
+
 Swift 5.0+
 
 **Acknowledgements**
