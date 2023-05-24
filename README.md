@@ -6,7 +6,7 @@
 
 **Swift Package Manager**
 
-The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
+The [Swift Package Manager](https://www.swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the swift compiler.
 
 Once you have your Swift package set up, adding KeyChainManager as a dependency is as easy as adding it to the dependencies value of your Package.swift.
 ```
