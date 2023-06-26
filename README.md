@@ -12,7 +12,7 @@ The [Swift Package Manager](https://www.swift.org/package-manager/) is a tool fo
 Once you have your Swift package set up, adding KeyChainManager as a dependency is as easy as adding it to the dependencies value of your Package.swift.
 ```
 dependencies: [
-    .package(url: "https://github.com/abbasjoyia99/KeyChainManager.git", .upToNextMajor(from: "2.0.0"))
+    .package(url: "https://github.com/abbasjoyia99/KeyChainManager.git", .upToNextMajor(from: "2.0.1"))
 ]
 ```
 
@@ -195,7 +195,7 @@ Contributions, issues, and feature requests are welcome! See [Contributors](http
 Any contribution is more than welcome! You can contribute through pull requests and issues on GitHub.
 
 ### Show your Support
-<!--Give a star if this project helped you.-->
+Give a star if this project helped you.
 
 
 **Contact**
