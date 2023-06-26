@@ -187,7 +187,125 @@ public class KeychainManager {
         return deleteData(forKey: forKey)
     }
     
-    private func deleteData(forKey key: String) -> Bool {
+    /**
+     Saves the specified data securely in the keychain.
+     
+     - Parameters:
+        - data: The data to be saved.
+        - forKey: The key associated with the value that will be saved or retrieved.
+     
+     - Returns: A boolean value indicating whether the data was saved successfully.
+     */
+    public func saveData<T>(data: T, forKey key: String) -> Bool where T: Encodable {
+        do {
+            let encodedData = try JSONEncoder().encode(data)
+            return saveEncodedData(encodedData, forKey: key)
+        } catch {
+            print("Failed to encode data: \(error)")
+            return false
+        }
+    }
+    
+    /**
+     Retrieves the specified data securely from the keychain.
+     
+     - Parameters:
+       - type: The type of data to retrieve.
+       - forKey: The key associated with the value to be retrieved.
+     
+     - Returns: The retrieved data of the specified type.
+     */
+    public func getData<T>(type: T.Type, forKey key: String) -> T? where T: Decodable {
+        guard let encodedData = getEncodedData(forKey: key) else {
+            return nil
+        }
+        
+        do {
+            let decodedData = try JSONDecoder().decode(type, from: encodedData)
+            return decodedData
+        } catch {
+            print("Failed to decode data: \(error)")
+            return nil
+        }
+    }
+    
+    /**
+     Updates the specified data securely in the keychain.
+     
+     - Parameters:
+        - data: The updated data.
+        - forKey: The key associated with the value to be updated.
+     
+     - Returns: A boolean value indicating whether the data was updated successfully.
+     */
+    public func updateData<T>(data: T, forKey key: String) -> Bool where T: Encodable {
+        do {
+            let encodedData = try JSONEncoder().encode(data)
+            return updateEncodedData(encodedData, forKey: key)
+        } catch {
+            print("Failed to encode data: \(error)")
+            return false
+        }
+    }
+    
+    /**
+     Deletes the specified data securely from the keychain.
+     
+     - Parameters:
+        - forKey: The key associated with the value to be deleted.
+     
+     - Returns: A boolean value indicating whether the data was deleted successfully.
+     */
+    public func deleteData(forKey key: String) -> Bool {
+        return deleteItem(forKey: key)
+    }
+    
+    private func saveEncodedData(_ encodedData: Data, forKey key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: encodedData
+        ]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        return status == errSecSuccess
+    }
+    
+    private func getEncodedData(forKey key: String) -> Data? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnData as String: true
+        ]
+        
+        var item: CFTypeRef?
+        
+        if SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess {
+            return item as? Data
+        } else {
+            return nil
+        }
+    }
+    
+    private func updateEncodedData(_ encodedData: Data, forKey key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key
+        ]
+        
+        let updateAttributes: [String: Any] = [
+            kSecValueData as String: encodedData
+        ]
+        
+        let status = SecItemUpdate(query as CFDictionary, updateAttributes as CFDictionary)
+        return status == errSecSuccess
+    }
+    
+    private func deleteItem(forKey key: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -198,3 +316,5 @@ public class KeychainManager {
         return status == errSecSuccess
     }
 }
+
+
