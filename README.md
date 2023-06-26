@@ -1,5 +1,6 @@
 # KeyChainManager
 
+
 **KeychainManager** is a Swift library that provides a convenient way to securely store and retrieve data in the keychain. It allows you to save and retrieve email and password values associated with unique keys. The library utilizes the Security framework to interact with the keychain.
 
 **Installation**
@@ -33,6 +34,76 @@ To use the **KeychainManager** library, follow these steps:
 ```
 import KeychainManager
 ```
+**Generic Data**
+
+### Saving Generic Data
+
+To save data securely in the keychain, use the `saveData(data:forKey:)` method:
+
+```swift
+let keychain = KeychainManager.shared
+let email = "user@example.com"
+
+// Save the email securely in the keychain
+let success = keychain.saveData(data: email, forKey: "userEmail")
+
+if success {
+    print("Email saved successfully.")
+} else {
+    print("Failed to save email.")
+}
+```
+
+### Retrieving Generic Data
+
+To retrieve data from the keychain, use the `getData(type:forKey:)` method:
+
+```swift
+let keychain = KeychainManager.shared
+
+// Retrieve the saved email from the keychain
+if let email: String = keychain.getData(type: String.self, forKey: "userEmail") {
+    print("Retrieved email: \(email)")
+} else {
+    print("Email not found in the keychain.")
+}
+```
+
+### Updating Generic Data
+
+To update existing data in the keychain, use the `updateData(data:forKey:)` method:
+
+```swift
+let keychain = KeychainManager.shared
+let newEmail = "newuser@example.com"
+
+// Update the email in the keychain
+let success = keychain.updateData(data: newEmail, forKey: "userEmail")
+
+if success {
+    print("Email updated successfully.")
+} else {
+    print("Failed to update email.")
+}
+```
+
+### Deleting Generic Data
+
+To delete data from the keychain, use the `deleteData(forKey:)` method:
+
+```swift
+let keychain = KeychainManager.shared
+
+// Delete the email from the keychain
+let success = keychain.deleteData(forKey: "userEmail")
+
+if success {
+    print("Email deleted successfully.")
+} else {
+    print("Failed to delete email.")
+}
+```
+<!--**String**-->
 2 Save data securely in the keychain:
 
 ```
@@ -117,14 +188,17 @@ Xcode 11.0+
 
 Swift 5.0+
 
-**Acknowledgements**
+## Contributing 
+Contributions, issues, and feature requests are welcome! See [Contributors](https://github.com/abbasjoyia99/KeyChainManager/graphs/contributors) for details.
 
-The library is inspired by Apple's Keychain Services and aims to provide a simplified interface for working with the keychain in Swift.
+###Contributions
+Any contribution is more than welcome! You can contribute through pull requests and issues on GitHub.
 
-If you have any suggestions, issues, or feature requests, please feel free to open an issue or submit a pull request. Contributions are welcome!
+### Show your Support
+<!--Give a star if this project helped you.-->
+
 
 **Contact**
 
 abbasjoyia99@gmail.com
-
 
